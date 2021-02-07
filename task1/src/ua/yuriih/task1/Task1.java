@@ -2,19 +2,32 @@ package ua.yuriih.task1;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Task1 {
     private static class TaskRunnable implements Runnable {
         private final int target;
         private final JSlider slider;
+        private final AtomicInteger semaphore;
+        private final JButton otherStopButton;
 
-        TaskRunnable(int target, JSlider slider) {
+        TaskRunnable(int target, JSlider slider, AtomicInteger semaphore, JButton otherStopButton) {
             this.target = target;
             this.slider = slider;
+            this.semaphore = semaphore;
+            this.otherStopButton = otherStopButton;
         }
 
         @Override
         public void run() {
+            while (!semaphore.compareAndSet(UNLOCKED, LOCKED)) {
+                Thread.yield();
+            }
+            //entered critical region
+
+            otherStopButton.setEnabled(false);
+
             while (!Thread.interrupted()) {
                 int value = slider.getValue();
                 if (value < target)
@@ -22,17 +35,17 @@ public class Task1 {
                 else if (value > target)
                     slider.setValue(value - 1);
 
-//                //simulate work
-//                for (int i = 0; i < Integer.MAX_VALUE; i++) {
-//                    slider.getValue();
-//                }
-                //sleep
                 try {
-                    Thread.sleep(1);
+                    Thread.sleep(50);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
             }
+
+            otherStopButton.setEnabled(true);
+
+            //leaving critical region
+            semaphore.set(UNLOCKED);
         }
     }
 
@@ -43,22 +56,41 @@ public class Task1 {
     private static Thread thread1;
     private static Thread thread2;
 
+    private static final int UNLOCKED = 0;
+    private static final int LOCKED = 1;
+    private static final AtomicInteger semaphore = new AtomicInteger();
+
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Task 1A");
+        JFrame frame = new JFrame("Task 1B");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         frame.setSize(WIDTH, HEIGHT);
         frame.setResizable(false);
 
 
-        JButton startButton = new JButton("Start");
-        startButton.setBounds(WIDTH / 4, 0, WIDTH / 2, ELEMENT_HEIGHT);
+        JButton startButton1 = new JButton("Start 1");
+        startButton1.setBounds(0, 0, WIDTH / 2, ELEMENT_HEIGHT);
 
-        frame.add(startButton);
+        frame.add(startButton1);
+
+        JButton startButton2 = new JButton("Start 2");
+        startButton2.setBounds(WIDTH / 2, 0, WIDTH / 2, ELEMENT_HEIGHT);
+
+        frame.add(startButton2);
+
+        JButton stopButton1 = new JButton("Stop 1");
+        stopButton1.setBounds(0, ELEMENT_HEIGHT, WIDTH / 2, ELEMENT_HEIGHT);
+
+        frame.add(stopButton1);
+
+        JButton stopButton2 = new JButton("Stop 2");
+        stopButton2.setBounds(WIDTH / 2, ELEMENT_HEIGHT, WIDTH / 2, ELEMENT_HEIGHT);
+
+        frame.add(stopButton2);
 
 
         JSlider slider = new JSlider(0, 100, 50);
-        slider.setBounds(0, ELEMENT_HEIGHT * 2, WIDTH, ELEMENT_HEIGHT * 2);
+        slider.setBounds(0, ELEMENT_HEIGHT * 3, WIDTH, ELEMENT_HEIGHT * 2);
         slider.setPaintTicks(true);
         slider.setMinorTickSpacing(10);
         slider.setMajorTickSpacing(20);
@@ -67,19 +99,38 @@ public class Task1 {
         frame.add(slider);
 
 
-        startButton.addActionListener(actionEvent -> {
+        startButton1.addActionListener(actionEvent -> {
             if (thread1 != null && thread1.isAlive())
                 return;
-            thread1 = new Thread(new TaskRunnable(10, slider));
+            thread1 = new Thread(new TaskRunnable(10, slider, semaphore, stopButton2));
             thread1.setDaemon(true);
             thread1.setPriority(Thread.MIN_PRIORITY);
 
-            thread2 = new Thread(new TaskRunnable(90, slider));
+            thread1.start();
+        });
+
+        startButton2.addActionListener(actionEvent -> {
+            if (thread2 != null && thread2.isAlive())
+                return;
+            thread2 = new Thread(new TaskRunnable(90, slider, semaphore, stopButton1));
             thread2.setDaemon(true);
             thread2.setPriority(Thread.MAX_PRIORITY);
 
-            thread1.start();
             thread2.start();
+        });
+
+        stopButton1.addActionListener(actionEvent -> {
+            if (thread1 == null || !thread1.isAlive())
+                return;
+
+            thread1.interrupt();
+        });
+
+        stopButton2.addActionListener(actionEvent -> {
+            if (thread2 == null || !thread2.isAlive())
+                return;
+
+            thread2.interrupt();
         });
 
 
