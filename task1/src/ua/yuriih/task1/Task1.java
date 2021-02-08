@@ -11,20 +11,26 @@ public class Task1 {
         private final JSlider slider;
         private final AtomicInteger semaphore;
         private final JButton otherStopButton;
+        private final JTextPane statusText;
 
-        TaskRunnable(int target, JSlider slider, AtomicInteger semaphore, JButton otherStopButton) {
+        TaskRunnable(int target, JSlider slider, AtomicInteger semaphore,
+                     JButton otherStopButton, JTextPane statusText) {
             this.target = target;
             this.slider = slider;
             this.semaphore = semaphore;
             this.otherStopButton = otherStopButton;
+            this.statusText = statusText;
         }
 
         @Override
         public void run() {
             while (!semaphore.compareAndSet(UNLOCKED, LOCKED)) {
+                if (!statusText.getText().equals(LOCKED_TEXT))
+                    statusText.setText(LOCKED_TEXT);
                 Thread.yield();
             }
             //entered critical region
+            statusText.setText("");
 
             otherStopButton.setEnabled(false);
 
@@ -52,6 +58,7 @@ public class Task1 {
     private static final int WIDTH = 400;
     private static final int HEIGHT = 250;
     private static final int ELEMENT_HEIGHT = 20;
+    private static final String LOCKED_TEXT = "Can't access; locked";
 
     private static Thread thread1;
     private static Thread thread2;
@@ -98,11 +105,16 @@ public class Task1 {
 
         frame.add(slider);
 
+        JTextPane statusText = new JTextPane();
+        statusText.setBounds(0, ELEMENT_HEIGHT * 6, WIDTH, ELEMENT_HEIGHT);
+        statusText.setEditable(false);
+
+        frame.add(statusText);
 
         startButton1.addActionListener(actionEvent -> {
             if (thread1 != null && thread1.isAlive())
                 return;
-            thread1 = new Thread(new TaskRunnable(10, slider, semaphore, stopButton2));
+            thread1 = new Thread(new TaskRunnable(10, slider, semaphore, stopButton2, statusText));
             thread1.setDaemon(true);
             thread1.setPriority(Thread.MIN_PRIORITY);
 
@@ -112,7 +124,7 @@ public class Task1 {
         startButton2.addActionListener(actionEvent -> {
             if (thread2 != null && thread2.isAlive())
                 return;
-            thread2 = new Thread(new TaskRunnable(90, slider, semaphore, stopButton1));
+            thread2 = new Thread(new TaskRunnable(90, slider, semaphore, stopButton1, statusText));
             thread2.setDaemon(true);
             thread2.setPriority(Thread.MAX_PRIORITY);
 
