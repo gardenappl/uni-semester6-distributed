@@ -6,6 +6,7 @@ import (
 )
 
 const totalItems = 15
+
 var stolenItemsCount = 0
 
 type ArmyItem struct {
@@ -17,7 +18,7 @@ func (item ArmyItem) String() string {
 }
 
 func makeArmyItem(i int) ArmyItem {
-	return ArmyItem{id: i * 100 + rand.Intn(100)}
+	return ArmyItem{id: i*100 + rand.Intn(100)}
 }
 
 func steal(stolenItems chan ArmyItem) {
@@ -30,11 +31,7 @@ func steal(stolenItems chan ArmyItem) {
 }
 
 func loadOnTruck(stolenItems chan ArmyItem, truckItems chan ArmyItem) {
-	for {
-		var item, opened = <-stolenItems
-		if !opened {
-			break
-		}
+	for item := range stolenItems {
 		fmt.Printf("Loaded %s on truck\n", item)
 		truckItems <- item
 	}
@@ -42,11 +39,7 @@ func loadOnTruck(stolenItems chan ArmyItem, truckItems chan ArmyItem) {
 }
 
 func countFromTruck(truckItems chan ArmyItem, done chan bool) {
-	for {
-		var _, opened = <-truckItems
-		if !opened {
-			break
-		}
+	for range truckItems {
 		stolenItemsCount++
 		fmt.Printf("Stolen items count: %d\n", stolenItemsCount)
 	}
