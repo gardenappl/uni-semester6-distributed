@@ -5,10 +5,10 @@ import java.util.Random;
 import java.util.concurrent.RecursiveTask;
 
 public class Tournament extends RecursiveTask<Integer> {
-    private static final Random RNG = new Random();
-    private List<Integer> fightersXi;
-    private int startIndex;
-    private int endIndex;
+    //private static final Random RNG = new Random();
+    private final List<Integer> fightersXi;
+    private final int startIndex;
+    private final int endIndex;
 
     public Tournament(List<Integer> fightersXi) {
         this.fightersXi = fightersXi;
@@ -33,14 +33,15 @@ public class Tournament extends RecursiveTask<Integer> {
         int midIndex = (startIndex + endIndex) / 2;
 
         Tournament subTour1 = new Tournament(fightersXi, startIndex, midIndex);
-        subTour1.fork();
         Tournament subTour2 = new Tournament(fightersXi, midIndex + 1, endIndex);
-        return getWinner(subTour2.compute(), subTour1.join());
+        subTour2.fork();
+        return getWinner(subTour1.compute(), subTour2.join());
     }
 
     private int getWinner(int fighterIndex1, int fighterIndex2) {
-        boolean firstWins = RNG.nextInt(fightersXi.get(fighterIndex1) + fightersXi.get(fighterIndex2))
-                < fightersXi.get(fighterIndex1);
+//        boolean firstWins = RNG.nextInt(fightersXi.get(fighterIndex1) + fightersXi.get(fighterIndex2))
+//                < fightersXi.get(fighterIndex1);
+        boolean firstWins = fightersXi.get(fighterIndex1) > fightersXi.get(fighterIndex2);
 
 
         System.out.printf("Fighter %d (Xi: %d) %s fighter %d (Xi: %d)\n",

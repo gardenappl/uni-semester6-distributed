@@ -6,6 +6,7 @@ import (
 )
 
 const totalItems = 15
+const bufferSize = 3
 
 var stolenItemsCount = 0
 
@@ -24,16 +25,16 @@ func makeArmyItem(i int) ArmyItem {
 func steal(stolenItems chan ArmyItem) {
 	for i := 0; i < totalItems; i++ {
 		var stolenItem = makeArmyItem(i)
-		fmt.Printf("Stole %s\n", stolenItem)
 		stolenItems <- stolenItem
+		fmt.Printf("Stole %s\n", stolenItem)
 	}
 	close(stolenItems)
 }
 
 func loadOnTruck(stolenItems chan ArmyItem, truckItems chan ArmyItem) {
 	for item := range stolenItems {
-		fmt.Printf("Loaded %s on truck\n", item)
 		truckItems <- item
+		fmt.Printf("Loaded %s on truck\n", item)
 	}
 	close(truckItems)
 }
@@ -47,9 +48,9 @@ func countFromTruck(truckItems chan ArmyItem, done chan bool) {
 }
 
 func main() {
-	var stolenItems = make(chan ArmyItem)
-	var truckItems = make(chan ArmyItem)
-	var done = make(chan bool)
+	var stolenItems = make(chan ArmyItem, bufferSize)
+	var truckItems = make(chan ArmyItem, bufferSize)
+	var done = make(chan bool, 1)
 
 	go steal(stolenItems)
 	go loadOnTruck(stolenItems, truckItems)

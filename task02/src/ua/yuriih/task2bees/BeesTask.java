@@ -18,8 +18,6 @@ public class BeesTask implements Runnable {
             if (foundPooh || currentY == forest.getHeight())
                 return null;
 
-            System.out.printf("Next task: search (%d; %d)\n", currentX, currentY);
-
             BeesTask task = new BeesTask(forest, currentX, currentY, this);
             currentX++;
             if (currentX == forest.getWidth()) {
@@ -48,6 +46,7 @@ public class BeesTask implements Runnable {
 
     @Override
     public void run() {
+        System.out.println(getMessage("Scanning..."));
         boolean foundPooh = forest.checkPooh(x, y);
         if (foundPooh) {
             System.out.println(getMessage("Target has been located, performed punishment"));
