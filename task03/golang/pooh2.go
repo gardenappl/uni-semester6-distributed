@@ -46,7 +46,7 @@ func simulateBee(ctx context.Context, id int, w *winnie) {
 	for {
 		fmt.Printf("Bee %d: Searching for honey...\n", id)
 
-		time.Sleep(100 * time.Millisecond)
+		time.Sleep(200 * time.Millisecond)
 
 		_ = w.semaphore.Acquire(ctx, 1)
 
@@ -72,3 +72,4 @@ func main() {
 	//Press any key to exit
 	_, _ = fmt.Scanln()
 }
+
