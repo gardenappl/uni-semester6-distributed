@@ -13,7 +13,7 @@ public class GardenSimulation {
         new Thread(new RunnablePrinter(garden, "ConsolePrinter", System.out)).start();
 
         try (PrintStream stream = new PrintStream("output.txt")) {
-            new Thread(new RunnablePrinter(garden, "FilePrinter", stream)).start();
+            new RunnablePrinter(garden, "FilePrinter", stream).run();
         } catch (IOException e) {
             e.printStackTrace();
         }

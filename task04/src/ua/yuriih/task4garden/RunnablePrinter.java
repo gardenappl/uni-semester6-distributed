@@ -37,6 +37,7 @@ public class RunnablePrinter implements Runnable {
                 }
                 stream.println();
             }
+            stream.flush();
             System.err.printf("[%s] Finished printing...\n", name);
             garden.getLock().unlockReading();
         }
