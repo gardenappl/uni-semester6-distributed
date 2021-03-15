@@ -2,17 +2,16 @@ package ua.yuriih.task3;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Semaphore;
 
 public class CigaretteSmokersProblem {
     private enum CigaretteIngredient {
         TOBACCO, PAPER, MATCHES
     }
     
-    private static final Map<CigaretteIngredient, Semaphore> ingredients =
+    private static final Map<CigaretteIngredient, SimpleSemaphore> ingredients =
             new ConcurrentHashMap<>();
-    private static final Semaphore tableReady = new Semaphore(0);
-    private static final Semaphore smokingDone = new Semaphore(1);
+    private static final SimpleSemaphore tableReady = new SimpleSemaphore(1);
+    private static final SimpleSemaphore smokingDone = new SimpleSemaphore(1);
     
     private static class Smoker implements Runnable{
         private final CigaretteIngredient myIngredient;
@@ -37,9 +36,9 @@ public class CigaretteSmokersProblem {
                         break;
                     }
                 }
-                tableReady.release();
 
                 if (!canMakeCigarette) {
+                    tableReady.release();
                     continue;
                 }
 
@@ -50,6 +49,7 @@ public class CigaretteSmokersProblem {
                         ingredients.get(ingredientType).acquire();
                     } catch (InterruptedException ignored) {}
                 }
+                tableReady.release();
 
                 System.out.printf("[Smoker with %s] Got ingredients! Starting to smoke...\n", myIngredient);
                 try {
@@ -66,6 +66,7 @@ public class CigaretteSmokersProblem {
         while (true) {
             try {
                 smokingDone.acquire();
+                tableReady.acquire();
             } catch (InterruptedException ignored) {}
 
             int excludedTypeNum = (int) (Math.random() * 3);
@@ -83,9 +84,9 @@ public class CigaretteSmokersProblem {
     };
     
     public static void main(String[] args) {
-        ingredients.put(CigaretteIngredient.TOBACCO, new Semaphore(0));
-        ingredients.put(CigaretteIngredient.PAPER, new Semaphore(0));
-        ingredients.put(CigaretteIngredient.MATCHES, new Semaphore(0));
+        ingredients.put(CigaretteIngredient.TOBACCO, new SimpleSemaphore(0));
+        ingredients.put(CigaretteIngredient.PAPER, new SimpleSemaphore(0));
+        ingredients.put(CigaretteIngredient.MATCHES, new SimpleSemaphore(0));
 
         new Thread(dealer).start();
         new Thread(new Smoker(CigaretteIngredient.TOBACCO)).start();
