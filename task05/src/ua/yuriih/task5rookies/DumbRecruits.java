@@ -23,8 +23,10 @@ public class DumbRecruits {
                     thread.interrupt();
             }
             
-            for (boolean rookieFacesLeft : facingLeft) {
-                System.out.print(rookieFacesLeft ? '<' : '>');
+            for (int rookie = 0; rookie < facingLeft.length; rookie++) {
+                if (rookie % (facingLeft.length / THREAD_COUNT) == 0)
+                    System.out.print("|||");
+                System.out.print(facingLeft[rookie] ? '<' : '>');
             }
             System.out.println();
 
@@ -41,7 +43,8 @@ public class DumbRecruits {
             threads[i] = new Thread(() -> {
                 while (!Thread.interrupted()) {
                     int startRookie = (facingLeft.length / THREAD_COUNT) * finalI;
-                    for (int rookie = startRookie; rookie < facingLeft.length; rookie++) {
+                    int endRookie = Math.min(startRookie + facingLeft.length / THREAD_COUNT, facingLeft.length);
+                    for (int rookie = startRookie; rookie < endRookie; rookie++) {
                         if (facingLeft[rookie]) {
                             nextFacingLeft[rookie] = rookie == 0 || facingLeft[rookie - 1];
                         } else {
