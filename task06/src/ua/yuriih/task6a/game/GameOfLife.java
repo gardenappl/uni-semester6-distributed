@@ -1,6 +1,7 @@
 package ua.yuriih.task6a.game;
 
 import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class GameOfLife {
@@ -11,7 +12,7 @@ public class GameOfLife {
     private boolean[][] nextState;
 
     final CyclicBarrier drawFrameBarrier;
-    final ReentrantReadWriteLock currentStateLock;
+    final Semaphore canSwap;
 
     public final int width;
     public final int height;
@@ -39,13 +40,13 @@ public class GameOfLife {
         drawFrameBarrier = new CyclicBarrier(threadCount, () -> {
             try {
                 Thread.sleep(SIMULATION_INTERVAL);
+                swapBuffers();
             } catch (InterruptedException e) {
                 return;
             }
-            swapBuffers();
         });
 
-        currentStateLock = new ReentrantReadWriteLock();
+        canSwap = new Semaphore(1);
     }
 
     public void start() {
@@ -69,7 +70,6 @@ public class GameOfLife {
                 } catch (InterruptedException e) {
                     break;
                 }
-                frame.updateCurrentBuffer();
                 frame.repaint();
             }
         });
@@ -89,11 +89,11 @@ public class GameOfLife {
         nextState[y][x] = isAlive;
     }
 
-    private void swapBuffers() {
-        currentStateLock.writeLock().lock();
+    private void swapBuffers() throws InterruptedException {
+        canSwap.acquire();
         boolean[][] swap = currentState;
         currentState = nextState;
         nextState = swap;
-        currentStateLock.writeLock().unlock();
+        canSwap.release();
     }
 }

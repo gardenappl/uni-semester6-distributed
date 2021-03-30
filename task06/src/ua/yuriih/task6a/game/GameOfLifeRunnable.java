@@ -17,7 +17,6 @@ public class GameOfLifeRunnable implements Runnable {
     @Override
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
-            game.currentStateLock.readLock().lock();
             System.err.printf("Updating state [%d; %d]\n", startRow, endRow - 1);
             for (int y = startRow; y < endRow; y++) {
                 for (int x = 0; x < game.width; x++) {
@@ -30,7 +29,6 @@ public class GameOfLifeRunnable implements Runnable {
                     }
                 }
             }
-            game.currentStateLock.readLock().unlock();
             System.err.printf("Updated state [%d; %d]\n", startRow, endRow - 1);
             try {
                 game.drawFrameBarrier.await();
