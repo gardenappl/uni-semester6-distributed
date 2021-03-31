@@ -3,12 +3,12 @@ package ua.yuriih.task5rookies;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
-public class DumbRecruits {
-    private static final int RECRUITS_COUNT = 100;
+public class DumbRookies {
+    private static final int ROOKIES_COUNT = 100;
     private static final int THREAD_COUNT = 2;
     
-    private static boolean[] facingLeft = new boolean[RECRUITS_COUNT];
-    private static boolean[] nextFacingLeft = new boolean[RECRUITS_COUNT];
+    private static boolean[] facingLeft = new boolean[ROOKIES_COUNT];
+    private static boolean[] nextFacingLeft = new boolean[ROOKIES_COUNT];
     private static boolean isStatic = true;
     private static final Thread[] threads = new Thread[THREAD_COUNT];
 
