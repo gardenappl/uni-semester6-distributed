@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	"runtime"
 	"sync"
 	"time"
 )
@@ -11,7 +10,6 @@ import (
 type Barrier struct {
 	arrivedParties int
 	totalParties   int
-	wokeUpParties  int
 	lock           sync.Mutex
 	barrierChan    chan int
 	runnable       func()
@@ -23,23 +21,22 @@ func NewBarrier(parties int, runnable func()) *Barrier {
 		totalParties:   parties,
 		barrierChan:    make(chan int, parties),
 		runnable:       runnable,
-		wokeUpParties:  0,
 	}
 	return &b
 }
 
 func (b *Barrier) Await() {
-	for b.arrivedParties == b.totalParties {
-		//threads are still waking up...
-		runtime.Gosched()
-	}
+	//for b.arrivedParties == b.totalParties {
+	//	//threads are still waking up...
+	//	runtime.Gosched()
+	//}
 
 	b.lock.Lock()
 	b.arrivedParties += 1
 	//First thread to exit barrier
 	if b.arrivedParties == b.totalParties {
 		b.runnable()
-		b.wokeUpParties = 0
+		b.arrivedParties = 0
 		for i := 0; i < b.totalParties; i++ {
 			b.barrierChan <- 1
 		}
@@ -47,20 +44,12 @@ func (b *Barrier) Await() {
 	b.lock.Unlock()
 
 	<-b.barrierChan
-
-	b.lock.Lock()
-	b.wokeUpParties++
-	//Last thread to exit barrier
-	if b.wokeUpParties == b.totalParties {
-		b.arrivedParties = 0
-	}
-	b.lock.Unlock()
 }
 
-func stringManipulator(index int, s []byte, abCounts []int, barrier *Barrier, wg *sync.WaitGroup) {
+func stringManipulator(index int, s []byte, abCounts []int, barrier1 *Barrier, barrier2 *Barrier, wg *sync.WaitGroup) {
 manipulatorLoop:
 	for true {
-		barrier.Await()
+		barrier1.Await()
 
 		abCounts[index] = 0
 		for i := 0; i < len(s); i++ {
@@ -71,7 +60,7 @@ manipulatorLoop:
 			}
 		}
 
-		barrier.Await()
+		barrier2.Await()
 
 		isHighest, highest := true, abCounts[index]
 		for i := 0; i < len(abCounts); i++ {
@@ -103,7 +92,7 @@ manipulatorLoop:
 					s[i] = 'D'
 					break
 				}
-			} else if abCounts[index]-highest >= 2 {
+			} else if highest-abCounts[index] >= 2 {
 				if s[i] == 'C' {
 					s[i] = 'A'
 					break
@@ -126,7 +115,8 @@ func main() {
 	abCounts := [4]int{}
 	strings := [4][]byte{}
 
-	barrier := NewBarrier(4, func() {
+	barrier1 := NewBarrier(4, func() {})
+	barrier2 := NewBarrier(4, func() {
 		for i := 0; i < 4; i++ {
 			fmt.Printf("%s (AB: %d), ", strings[i], abCounts[i])
 		}
@@ -140,7 +130,7 @@ func main() {
 			strings[i][j] = abcd[int(rand.Float32()*4)]
 		}
 
-		go stringManipulator(i, strings[i], abCounts[:], barrier, wg)
+		go stringManipulator(i, strings[i], abCounts[:], barrier1, barrier2, wg)
 	}
 
 	wg.Wait()
