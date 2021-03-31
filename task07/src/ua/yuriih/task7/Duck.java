@@ -9,7 +9,7 @@ public class Duck extends GameEntity implements DrawableEntity {
     private float velocityY;
     private boolean isDead;
     
-    public static final float SIZE = 20;
+    public static final float SIZE = 25;
     private static final Color[] COLORS = new Color[] {
             new Color(40, 150, 80),
             new Color(100, 150, 40),
@@ -41,6 +41,7 @@ public class Duck extends GameEntity implements DrawableEntity {
     @Override
     public void update() {
         System.err.println("Duck update!");
+
         if (game.shotBullet && !isDead) {
             if (game.mouseX >= x && game.mouseX < x + SIZE &&
                     game.mouseY >= y && game.mouseY < y + SIZE) {
@@ -56,12 +57,12 @@ public class Duck extends GameEntity implements DrawableEntity {
                     game.drawableEntities.add(p);
                 }
 
+                game.ducksShot++;
                 isDead = true;
                 velocityX = 0;
                 velocityY = 5;
             }
         }
-
         this.x += velocityX;
         this.y += velocityY;
     }

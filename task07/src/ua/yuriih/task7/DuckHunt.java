@@ -21,6 +21,7 @@ public class DuckHunt implements Runnable {
     public boolean shotBullet;
     public int bulletsCount = 10;
     public int ducksToSpawn = 10;
+    public int ducksShot = 0;
 
     public final ArrayList<GameEntity> entitiesToRegister = new ArrayList<>();
     public final ArrayList<GameEntity> gameEntities = new ArrayList<>();
@@ -28,7 +29,11 @@ public class DuckHunt implements Runnable {
 
     private final TextLabel bulletLabel =
             new TextLabel(Font.getFont(Font.MONOSPACED), "Bullets: " + bulletsCount, 20, 20);
-    
+
+    private final TextLabel ducksLabel =
+            new TextLabel(Font.getFont(Font.MONOSPACED), "Ducks!: 10", 20, 40);
+
+    public boolean won = false;
     public boolean gameOver = false;
     
     public DuckHunt() {
@@ -48,9 +53,11 @@ public class DuckHunt implements Runnable {
     @Override
     public void run() {
         drawableEntities.add(bulletLabel);
+        drawableEntities.add(ducksLabel);
 
         stateLock.lock();
         while (!Thread.interrupted()) {
+            //pre-tick
             while (!entitiesToRegister.isEmpty())
                 registerEntity(entitiesToRegister.remove(entitiesToRegister.size() - 1));
             
@@ -60,7 +67,7 @@ public class DuckHunt implements Runnable {
                         this,
                         -Duck.SIZE / 2 + (fromTheLeft ? 0 : WIDTH),
                         50 + (float)Math.random() * 100,
-                        (float)Math.random() * (fromTheLeft ? 3 : -3),
+                        (1f + (float)Math.random()) * (fromTheLeft ? 1f : -1f),
                         (float)Math.random() * 0.5f
                 );
                 registerEntity((GameEntity)duck);
@@ -68,7 +75,6 @@ public class DuckHunt implements Runnable {
                 ducksToSpawn--;
             }
 
-            //pre-tick
             if (mouseDown) {
                 if (bulletsCount > 0) {
                     System.err.println("Bullet shot!");
@@ -78,12 +84,7 @@ public class DuckHunt implements Runnable {
                 }
                 mouseDown = false;
             }
-            
-            if (bulletsCount == 0 && !gameOver) {
-                registerEntity(new TextLabel(new Font(Font.MONOSPACED, Font.BOLD, 48),
-                        "GAME OVER", 20, HEIGHT / 2));
-                gameOver = true;
-            }
+            ducksLabel.setText("Ducks: " + Math.max(0, 10 - ducksShot));
 
             //tick
 
@@ -101,11 +102,30 @@ public class DuckHunt implements Runnable {
             stateLock.lock();
 
             //post-tick
+            if (ducksShot >= 10 && !gameOver) {
+                registerEntity(new TextLabel(new Font(Font.MONOSPACED, Font.BOLD, 48),
+                        "YOU WON", 20, HEIGHT / 2));
+                gameOver = true;
+                won = true;
+            } else if (bulletsCount == 0 && !gameOver) {
+                registerEntity(new TextLabel(new Font(Font.MONOSPACED, Font.BOLD, 48),
+                        "GAME OVER", 20, HEIGHT / 2));
+                gameOver = true;
+            }
+
             shotBullet = false;
             
             for (int i = 0; i < gameEntities.size();) {
                 if (gameEntities.get(i).shouldDeregister()) {
                     gameEntities.remove(i);
+                } else {
+                    i++;
+                }
+            }
+            for (int i = 0; i < drawableEntities.size();) {
+                DrawableEntity entity = drawableEntities.get(i);
+                if (entity instanceof GameEntity && ((GameEntity) entity).shouldDeregister()) {
+                    drawableEntities.remove(i);
                 } else {
                     i++;
                 }

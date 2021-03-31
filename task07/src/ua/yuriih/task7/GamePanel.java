@@ -21,7 +21,12 @@ public class GamePanel extends JPanel {
     public void paint(Graphics g) {
         game.stateLock.lock();
 //        System.err.println("Drawing...");
-        g.setColor(game.gameOver ? new Color(220, 170, 170) : new Color(170, 220, 220));
+        if (game.gameOver && game.won)
+            g.setColor(new Color(170, 220, 170));
+        else if (game.gameOver)
+            g.setColor(new Color(220, 170, 170));
+        else
+        g.setColor(new Color(170, 220, 220));
         g.fillRect(0, 0, DuckHunt.WIDTH, DuckHunt.HEIGHT);
 
         for (DrawableEntity entity : game.drawableEntities) {
