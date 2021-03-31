@@ -4,11 +4,10 @@ import java.awt.*;
 import java.util.List;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class GameOfLife {
     private static final int SIMULATION_INTERVAL = 500;
-    private static final int DRAWING_INTERVAL = 250;
+    private static final int DRAWING_INTERVAL = 200;
 
     private int[][] currentState;
     private int[][] nextState;

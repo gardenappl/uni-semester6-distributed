@@ -5,17 +5,15 @@ import ua.yuriih.task6a.game.GameOfLife;
 import javax.swing.*;
 
 public class Main {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         GameOfLife game = new GameOfLife(50, 50, 11);
 
         //Glider
-        game.setCellCurrentlyAlive(1, 3, true);
+        game.setCellCurrentlyAlive(1, 5, true);
+        game.setCellCurrentlyAlive(2, 5, true);
+        game.setCellCurrentlyAlive(3, 5, true);
+        game.setCellCurrentlyAlive(3, 4, true);
         game.setCellCurrentlyAlive(2, 3, true);
-        game.setCellCurrentlyAlive(3, 3, true);
-        game.setCellCurrentlyAlive(3, 2, true);
-        game.setCellCurrentlyAlive(2, 1, true);
-
-        System.err.println(game.isCellCurrentlyAlive(5, 4));
 
         game.start();
 
@@ -24,9 +22,5 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setTitle("Conway's Game of Life");
         frame.setVisible(true);
-
-
-        Thread.sleep(1000);
-        System.err.println(game.isCellCurrentlyAlive(5, 5));
     }
 }

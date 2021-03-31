@@ -6,7 +6,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class GameOfLife {
     private static final int SIMULATION_INTERVAL = 500;
-    private static final int DRAWING_INTERVAL = 250;
+    private static final int DRAWING_INTERVAL = 100;
 
     private boolean[][] currentState;
     private boolean[][] nextState;

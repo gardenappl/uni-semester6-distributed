@@ -16,24 +16,24 @@ public class Main {
         ));
 
         //Glider 1
-        game.setCurrentCellCiv(1, 3, 1);
-        game.setCurrentCellCiv(2, 3, 1);
-        game.setCurrentCellCiv(3, 3, 1);
-        game.setCurrentCellCiv(3, 2, 1);
-        game.setCurrentCellCiv(2, 1, 1);
+        game.setCurrentCellCiv(1, 25, 1);
+        game.setCurrentCellCiv(2, 25, 1);
+        game.setCurrentCellCiv(3, 25, 1);
+        game.setCurrentCellCiv(3, 26, 1);
+        game.setCurrentCellCiv(2, 27, 1);
 
         //Glider 2
-        game.setCurrentCellCiv(10, 3, 2);
-        game.setCurrentCellCiv(9, 3, 2);
-        game.setCurrentCellCiv(8, 3, 2);
-        game.setCurrentCellCiv(8, 2, 2);
-        game.setCurrentCellCiv(9, 1, 2);
+        game.setCurrentCellCiv(10, 25, 2);
+        game.setCurrentCellCiv(9, 25, 2);
+        game.setCurrentCellCiv(8, 25, 2);
+        game.setCurrentCellCiv(8, 26, 2);
+        game.setCurrentCellCiv(9, 27, 2);
 
 
         //Blinker
-        game.setCurrentCellCiv(5, 10, 1);
-        game.setCurrentCellCiv(5, 11, 2);
-        game.setCurrentCellCiv(5, 12, 3);
+        game.setCurrentCellCiv(45, 16, 3);
+        game.setCurrentCellCiv(45, 17, 3);
+        game.setCurrentCellCiv(45, 18, 3);
 
         game.start();
 
