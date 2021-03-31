@@ -1,4 +1,4 @@
-package ua.yuriih.task7;
+package ua.yuriih.task7a;
 
 import java.awt.*;
 

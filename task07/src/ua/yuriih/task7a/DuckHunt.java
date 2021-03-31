@@ -1,4 +1,4 @@
-package ua.yuriih.task7;
+package ua.yuriih.task7a;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -46,10 +46,6 @@ public class DuckHunt implements Runnable {
         new Thread(entity).start();
     }
 
-    private void registerEntity(DrawableEntity entity) {
-        drawableEntities.add(entity);
-    }
-
     @Override
     public void run() {
         drawableEntities.add(bulletLabel);
@@ -70,8 +66,8 @@ public class DuckHunt implements Runnable {
                         (1f + (float)Math.random()) * (fromTheLeft ? 1f : -1f),
                         (float)Math.random() * 0.5f
                 );
-                registerEntity((GameEntity)duck);
-                registerEntity((DrawableEntity)duck);
+                registerEntity(duck);
+                drawableEntities.add(duck);
                 ducksToSpawn--;
             }
 
@@ -103,12 +99,12 @@ public class DuckHunt implements Runnable {
 
             //post-tick
             if (ducksShot >= 10 && !gameOver) {
-                registerEntity(new TextLabel(new Font(Font.MONOSPACED, Font.BOLD, 48),
+                drawableEntities.add(new TextLabel(new Font(Font.MONOSPACED, Font.BOLD, 48),
                         "YOU WON", 20, HEIGHT / 2));
                 gameOver = true;
                 won = true;
             } else if (bulletsCount == 0 && !gameOver) {
-                registerEntity(new TextLabel(new Font(Font.MONOSPACED, Font.BOLD, 48),
+                drawableEntities.add(new TextLabel(new Font(Font.MONOSPACED, Font.BOLD, 48),
                         "GAME OVER", 20, HEIGHT / 2));
                 gameOver = true;
             }

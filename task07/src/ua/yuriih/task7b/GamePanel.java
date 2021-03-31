@@ -1,7 +1,11 @@
-package ua.yuriih.task7;
+package ua.yuriih.task7b;
+
+import ua.yuriih.task7b.entities.DrawableEntity;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -12,7 +16,6 @@ public class GamePanel extends JPanel {
         this.game = game;
         
         this.setSize(DuckHunt.WIDTH, DuckHunt.HEIGHT);
-        addMouseListener(new GameMouseAdapter());
 
         setDoubleBuffered(true);
     }
@@ -36,15 +39,5 @@ public class GamePanel extends JPanel {
 
         Toolkit.getDefaultToolkit().sync();
         repaint();
-    }
-
-    private class GameMouseAdapter extends MouseAdapter {
-        @Override
-        public void mousePressed(MouseEvent e) {
-            System.err.printf("Clicked! %d; %d\n", e.getX(), e.getY());
-            game.mouseDown = true;
-            game.mouseX = e.getX();
-            game.mouseY = e.getY();
-        }
     }
 }

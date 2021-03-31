@@ -1,6 +1,9 @@
-package ua.yuriih.task7;
+package ua.yuriih.task7b;
 
 import javax.swing.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class Main {
     public static void main(String[] args) {
@@ -10,14 +13,15 @@ public class Main {
         JFrame frame = new JFrame();
 
         frame.add(panel);
-        frame.setTitle("Duck Hunt");
+        frame.setTitle("Duck Hunt 2");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+        frame.addKeyListener(new GameKeyAdapter(game));
         frame.setSize(DuckHunt.WIDTH, DuckHunt.HEIGHT);
         frame.setVisible(true);
 
-        Thread thread = new Thread(game);
-        thread.setDaemon(true);
-        thread.start();
+        Thread gameThread = new Thread(game);
+        gameThread.setDaemon(true);
+        gameThread.start();
     }
 }

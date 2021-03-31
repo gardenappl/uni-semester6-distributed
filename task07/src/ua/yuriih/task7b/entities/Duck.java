@@ -1,4 +1,6 @@
-package ua.yuriih.task7;
+package ua.yuriih.task7b.entities;
+
+import ua.yuriih.task7b.DuckHunt;
 
 import java.awt.*;
 
@@ -42,25 +44,31 @@ public class Duck extends GameEntity implements DrawableEntity {
     public void update() {
         System.err.println("Duck update!");
 
-        if (game.shotBullet && !isDead) {
-            if (game.mouseX >= x && game.mouseX < x + SIZE &&
-                    game.mouseY >= y && game.mouseY < y + SIZE) {
-                for (int i = 0; i < 5; i++) {
-                    Particle p = new Particle(
-                            game,
-                            x + SIZE / 2,
-                            y + SIZE / 2,
-                            (float) (Math.random() - 0.5) * 5,
-                            (float) (Math.random() - 0.5) * 5
-                    );
-                    game.entitiesToRegister.add(p);
-                    game.drawableEntities.add(p);
-                }
+        if (!isDead) {
+            for (GameEntity entity : game.gameEntities) {
+                if (entity instanceof Bullet) {
+                    float bulletX = ((Bullet) entity).getX() + Bullet.SIZE / 2;
+                    float bulletY = ((Bullet) entity).getY() + Bullet.SIZE / 2;
+                    if (bulletX >= x && bulletX < x + SIZE &&
+                            bulletY >= y && bulletY < y + SIZE) {
+                        for (int i = 0; i < 5; i++) {
+                            Particle p = new Particle(
+                                    game,
+                                    x + SIZE / 2,
+                                    y + SIZE / 2,
+                                    (float) (Math.random() - 0.5) * 5,
+                                    (float) (Math.random() - 0.5) * 5
+                            );
+                            game.entitiesToRegister.add(p);
+                            game.drawableEntities.add(p);
+                        }
 
-                game.ducksShot++;
-                isDead = true;
-                velocityX = 0;
-                velocityY = 5;
+                        game.ducksShot++;
+                        isDead = true;
+                        velocityX = 0;
+                        velocityY = 5;
+                    }
+                }
             }
         }
         this.x += velocityX;
