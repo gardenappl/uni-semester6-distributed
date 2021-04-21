@@ -12,7 +12,7 @@ public class Student implements Cloneable {
 
     private final String name;
     private final LocalDate birthDate;
-    private int averageScore;
+    private float averageScore;
     private boolean hasScholarship;
 
     public Student(int id, int groupId, String name, LocalDate birthDate, boolean hasScholarship) {
@@ -31,11 +31,11 @@ public class Student implements Cloneable {
         return birthDate;
     }
 
-    public int getAverageScore() {
+    public float getAverageScore() {
         return averageScore;
     }
 
-    public void setAverageScore(int averageScore) {
+    public void setAverageScore(float averageScore) {
         this.averageScore = averageScore;
     }
 

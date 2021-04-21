@@ -23,7 +23,7 @@
         <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="group" type="xs:integer" use="required"/>
         <xs:attribute name="birthdate" type="xs:date" use="required"/>
-        <xs:attribute name="avgscore" type="xs:integer" use="required"/>
+        <xs:attribute name="avgscore" type="xs:float" use="required"/>
         <xs:attribute name="scholarship" type="xs:boolean" use="required"/>
     </xs:complexType>
 </xs:schema>

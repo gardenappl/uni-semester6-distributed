@@ -87,7 +87,7 @@ public class UniversityDao {
                 throw e;
             }
         });
-        
+
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         try {
             transformer = transformerFactory.newTransformer();
@@ -106,6 +106,14 @@ public class UniversityDao {
         if (!groups.containsKey(student.getGroupId()))
             throw new IllegalArgumentException("No group with ID " + student.getGroupId());
         students.put(student.getId(), student);
+    }
+
+    public synchronized int getFreeStudentId() {
+        for (int i = 0; i < Integer.MAX_VALUE; i++) {
+            if (!students.containsKey(i))
+                return i;
+        }
+        throw new IndexOutOfBoundsException("No free index!");
     }
 
     public synchronized void updateStudent(Student student) {
@@ -138,6 +146,14 @@ public class UniversityDao {
         if (groups.containsKey(group.getId()))
             throw new IllegalArgumentException("Already have a group wtih ID " + group.getId());
         groups.put(group.getId(), group);
+    }
+
+    public synchronized int getFreeGroupId() {
+        for (int i = 0; i < Integer.MAX_VALUE; i++) {
+            if (!groups.containsKey(i))
+                return i;
+        }
+        throw new IndexOutOfBoundsException("No free index!");
     }
 
     public synchronized void updateGroup(Group group) {
@@ -188,7 +204,7 @@ public class UniversityDao {
         element.setAttribute(NAME, student.getName());
         element.setAttribute(GROUP_ID, Integer.toString(student.getGroupId()));
         element.setAttribute(DATE_OF_BIRTH, student.getBirthDate().toString());
-        element.setAttribute(AVERAGE_SCORE, Integer.toString(student.getAverageScore()));
+        element.setAttribute(AVERAGE_SCORE, Float.toString(student.getAverageScore()));
         element.setAttribute(HAS_SCHOLARSHIP, Boolean.toString(student.hasScholarship()));
 
         return element;
@@ -251,7 +267,7 @@ public class UniversityDao {
                 LocalDate.parse(element.getAttribute(DATE_OF_BIRTH)),
                 Boolean.parseBoolean(element.getAttribute(HAS_SCHOLARSHIP))
         );
-        student.setAverageScore(Integer.parseInt(element.getAttribute(AVERAGE_SCORE)));
+        student.setAverageScore(Float.parseFloat(element.getAttribute(AVERAGE_SCORE)));
         addStudent(student);
     }
 }
