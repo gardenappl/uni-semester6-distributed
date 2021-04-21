@@ -51,6 +51,8 @@ public class UniversityFrame extends JFrame {
     private final DefaultListModel<GroupItem> groupsListModel = new DefaultListModel<>();
     private final DefaultComboBoxModel<GroupItem> studentGroupBoxModel = new DefaultComboBoxModel<>();
 
+    private final JButton studentAddButton;
+    private final JButton studentDeleteButton;
     private final JList<StudentItem> studentsList;
     private final JList<GroupItem> groupsList;
     private final JTextField studentNameField;
@@ -169,9 +171,9 @@ public class UniversityFrame extends JFrame {
         add(studentUpdateButton);
 
 
-        deleteButton = new JButton("Delete");
-        deleteButton.setBounds(WIDTH / 3, HEIGHT - BOTTOM_BAR_HEIGHT, WIDTH / 6, BOTTOM_BAR_HEIGHT / 2);
-        deleteButton.addActionListener(actionEvent -> {
+        studentDeleteButton = new JButton("Delete");
+        studentDeleteButton.setBounds(WIDTH / 3, HEIGHT - BOTTOM_BAR_HEIGHT, WIDTH / 6, BOTTOM_BAR_HEIGHT / 2);
+        studentDeleteButton.addActionListener(actionEvent -> {
             StudentItem selected = studentsList.getSelectedValue();
             if (selected == null)
                 return;
@@ -179,29 +181,33 @@ public class UniversityFrame extends JFrame {
             dao.deleteStudent(selected.student.getId());
             updateStudentsList();
         });
-        add(deleteButton);
+        add(studentDeleteButton);
 
 
-        addButton = new JButton("Add");
-        addButton.setBounds(WIDTH / 2, HEIGHT - BOTTOM_BAR_HEIGHT, WIDTH / 6, BOTTOM_BAR_HEIGHT / 2);
-        addButton.addActionListener(actionEvent -> {
-            String name = JOptionPane.showInputDialog(
+        studentAddButton = new JButton("Add");
+        studentAddButton.setBounds(WIDTH / 2, HEIGHT - BOTTOM_BAR_HEIGHT, WIDTH / 6, BOTTOM_BAR_HEIGHT / 2);
+        studentAddButton.addActionListener(actionEvent -> {
+            String input = JOptionPane.showInputDialog(
                     this,
                     "Enter name for the new student:",
                     null,
                     JOptionPane.QUESTION_MESSAGE
             );
-            if (name == null || name.length() == 0)
+            if (input == null || input.length() == 0)
                 return;
+            String name = input;
 
-            LocalDate birthDate = LocalDate.parse(JOptionPane.showInputDialog(
+            input = JOptionPane.showInputDialog(
                     this,
                     "Enter date of birth:",
                     null,
                     JOptionPane.QUESTION_MESSAGE
-            ));
+            );
+            if (input == null || input.length() == 0)
+                return;
+            LocalDate birthDate = LocalDate.parse(input);
 
-            boolean hasScholarship = Boolean.parseBoolean((String)JOptionPane.showInputDialog(
+            input = (String)JOptionPane.showInputDialog(
                     this,
                     "Does this student have a scholarship?",
                     null,
@@ -209,7 +215,10 @@ public class UniversityFrame extends JFrame {
                     null,
                     new String[] { "true", "false" },
                     null
-            ));
+            );
+            if (input == null || input.length() == 0)
+                return;
+            boolean hasScholarship = Boolean.parseBoolean(input);
 
             synchronized (dao) {
                 int id = dao.getFreeStudentId();
@@ -218,7 +227,7 @@ public class UniversityFrame extends JFrame {
             }
             updateStudentsList();
         });
-        add(addButton);
+        add(studentAddButton);
 
 
         JButton loadButton = new JButton("Load");
@@ -278,11 +287,15 @@ public class UniversityFrame extends JFrame {
     private void updateStudentsList() {
         studentsListModel.clear();
         GroupItem selected = groupsList.getSelectedValue();
-        if (selected == null)
-            return;
-
-        for (Student student : dao.getAllStudentsFromGroup(selected.group.getId()))
-            studentsListModel.addElement(new StudentItem(student));
+        if (selected == null) {
+            studentAddButton.setEnabled(false);
+            studentDeleteButton.setEnabled(false);
+        } else {
+            studentAddButton.setEnabled(true);
+            studentDeleteButton.setEnabled(true);
+            for (Student student : dao.getAllStudentsFromGroup(selected.group.getId()))
+                studentsListModel.addElement(new StudentItem(student));
+        }
     }
 
     private void updateStudentData() {
