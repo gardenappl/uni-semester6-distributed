@@ -1,17 +1,17 @@
-package ua.yuriih.task10.ui;
+package ua.yuriih.task11.ui;
 
 import org.xml.sax.SAXException;
-import ua.yuriih.task10.controller.UniversityDao;
-import ua.yuriih.task10.model.Group;
-import ua.yuriih.task10.model.Student;
+import ua.yuriih.task11.dao.GroupDao;
+import ua.yuriih.task11.dao.StudentDao;
+import ua.yuriih.task11.model.Group;
+import ua.yuriih.task11.model.Student;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Objects;
 
-public class UniversityFrame extends JFrame {
+public class UniversityPanel extends JPanel {
     //lazy man's UI
     private static final int WIDTH = 600;
     private static final int HEIGHT = 500;
@@ -45,7 +45,8 @@ public class UniversityFrame extends JFrame {
         }
     }
 
-    private final UniversityDao dao;
+    private final GroupDao groupDao;
+    private final StudentDao studentDao;
 
     private final DefaultListModel<StudentItem> studentsListModel = new DefaultListModel<>();
     private final DefaultListModel<GroupItem> groupsListModel = new DefaultListModel<>();
@@ -61,17 +62,12 @@ public class UniversityFrame extends JFrame {
     private final JSpinner studentAverageScoreSpinner;
     private final JComboBox<GroupItem> studentGroupBox;
 
-    private final String fileName;
-
-    public UniversityFrame(UniversityDao dao, String fileName) {
-        super("University");
-
-        setSize(WIDTH, HEIGHT);
-        setResizable(false);
+    public UniversityPanel(GroupDao groupDao, StudentDao studentDao) {
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setLayout(null);
 
-        this.dao = dao;
-        this.fileName = fileName;
+        this.groupDao = groupDao;
+        this.studentDao = studentDao;
 
 
         groupsList = new JList<>(groupsListModel);
@@ -90,7 +86,7 @@ public class UniversityFrame extends JFrame {
             if (selected == null)
                 return;
 
-            dao.deleteGroup(selected.group.getId());
+            groupDao.deleteGroup(selected.group.getId());
             updateGroupsList();
         });
         add(deleteButton);
@@ -106,9 +102,9 @@ public class UniversityFrame extends JFrame {
             if (input == null || input.length() == 0)
                 return;
 
-            synchronized (dao) {
-                int id = dao.getFreeGroupId();
-                dao.addGroup(new Group(id, input));
+            synchronized (groupDao) {
+                int id = groupDao.getFreeGroupId();
+                groupDao.addGroup(new Group(id, input));
             }
             updateGroupsList();
         });
@@ -165,7 +161,7 @@ public class UniversityFrame extends JFrame {
             );
             newStudent.setAverageScore(((Number)studentAverageScoreSpinner.getValue()).floatValue());
 
-            dao.updateStudent(newStudent);
+            studentDao.updateStudent(newStudent);
             updateStudentsList();
         });
         add(studentUpdateButton);
@@ -178,7 +174,7 @@ public class UniversityFrame extends JFrame {
             if (selected == null)
                 return;
 
-            dao.deleteStudent(selected.student.getId());
+            studentDao.deleteStudent(selected.student.getId());
             updateStudentsList();
         });
         add(studentDeleteButton);
@@ -220,53 +216,14 @@ public class UniversityFrame extends JFrame {
                 return;
             boolean hasScholarship = Boolean.parseBoolean(input);
 
-            synchronized (dao) {
-                int id = dao.getFreeStudentId();
-                dao.addStudent(new Student(id, groupsList.getSelectedValue().group.getId(),
+            synchronized (studentDao) {
+                int id = studentDao.getFreeStudentId();
+                studentDao.addStudent(new Student(id, groupsList.getSelectedValue().group.getId(),
                         name, birthDate, hasScholarship));
             }
             updateStudentsList();
         });
         add(studentAddButton);
-
-
-        JButton loadButton = new JButton("Load");
-        loadButton.setBounds(WIDTH / 4, HEIGHT - BOTTOM_BAR_HEIGHT / 2, WIDTH / 4, BOTTOM_BAR_HEIGHT / 2);
-        loadButton.addActionListener(actionEvent -> {
-            try {
-                dao.readFromFile("test.xml");
-                updateGroupsList();
-                updateStudentsList();
-            } catch (IOException | SAXException e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(
-                        this,
-                        e.getMessage(),
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE
-                );
-            }
-        });
-        add(loadButton);
-
-
-        JButton saveButton = new JButton("Save");
-        saveButton.setBounds(WIDTH / 2, HEIGHT - BOTTOM_BAR_HEIGHT / 2, WIDTH / 4, BOTTOM_BAR_HEIGHT / 2);
-        saveButton.addActionListener(actionEvent -> {
-            try {
-                dao.saveToFile("test.xml");
-            } catch (IOException e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(
-                        this,
-                        e.getMessage(),
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE
-                );
-            }
-        });
-        add(saveButton);
-
 
         updateGroupsList();
         updateStudentsList();
@@ -277,7 +234,7 @@ public class UniversityFrame extends JFrame {
         groupsListModel.clear();
         studentGroupBoxModel.removeAllElements();
 
-        for (Group group : dao.getAllGroups()) {
+        for (Group group : groupDao.getAllGroups()) {
             GroupItem item = new GroupItem(group);
             groupsListModel.addElement(item);
             studentGroupBoxModel.addElement(item);
@@ -293,7 +250,7 @@ public class UniversityFrame extends JFrame {
         } else {
             studentAddButton.setEnabled(true);
             studentDeleteButton.setEnabled(true);
-            for (Student student : dao.getAllStudentsFromGroup(selected.group.getId()))
+            for (Student student : studentDao.getAllStudentsFromGroup(selected.group.getId()))
                 studentsListModel.addElement(new StudentItem(student));
         }
     }
