@@ -24,6 +24,10 @@ public class ConsoleUI {
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
+
+            if (line.isEmpty())
+                continue;
+
             switch (line) {
                 case "CLOCKS_BY_TYPE" -> {
                     System.out.println("Enter type (0 = mechanical, 1 = piezo):");
@@ -57,11 +61,7 @@ public class ConsoleUI {
                     for (Manufacturer manufacturer : manufacturers)
                         System.out.println(manufacturer);
                 }
-                default -> {
-                    System.out.println("Unknown command.");
-                }
             }
-
             System.out.println("Enter command (CLOCKS_BY_TYPE, " +
                     "CLOCKS_BY_COUNTRY, " +
                     "CLOCKS_MECHANICAL_CHEAPER_THAN, " +
