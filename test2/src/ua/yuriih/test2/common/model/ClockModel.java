@@ -54,6 +54,7 @@ public class ClockModel implements Serializable {
                 ", manufacturerId=" + manufacturerId +
                 ", type=" + type +
                 ", cost=" + price +
+                ", amount=" + amount +
                 '}';
     }
 

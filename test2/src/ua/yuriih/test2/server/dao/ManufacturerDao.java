@@ -64,7 +64,7 @@ public class ManufacturerDao {
     public ArrayList<Manufacturer> getManufacturersWithMaxTotalClockAmount(int maxTotalAmount) {
         String sql = "SELECT * FROM clock_company" +
                 " WHERE (" +
-                "    SELECT COUNT(*) FROM clock_model" +
+                "    SELECT SUM(clock_model.amount) FROM clock_model" +
                 "    WHERE clock_model.id_co = clock_company.id_co" +
                 ") <= ?";
 
