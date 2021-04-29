@@ -2,6 +2,7 @@ package ua.yuriih.task10.controller;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
@@ -91,6 +92,7 @@ public class UniversityDao {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         try {
             transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         } catch (TransformerConfigurationException e) {
             throw new RuntimeException(e);
         }
@@ -242,7 +244,9 @@ public class UniversityDao {
         Element root = document.getDocumentElement();
         NodeList children = root.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
-            parseGroup((Element) children.item(i));
+            Node node = children.item(i);
+            if (node instanceof Element)
+                parseGroup((Element) node);
         }
     }
 
@@ -255,7 +259,9 @@ public class UniversityDao {
 
         NodeList children = element.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
-            parseStudent((Element) children.item(i));
+            Node item = children.item(i);
+            if (item instanceof Element)
+                parseStudent((Element) item);
         }
     }
 
