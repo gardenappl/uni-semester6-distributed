@@ -1,7 +1,7 @@
-package ua.yuriih.test2.dao;
+package ua.yuriih.test2.server.dao;
 
-import ua.yuriih.test2.model.ClockModel;
-import ua.yuriih.test2.model.ClockType;
+import ua.yuriih.test2.common.model.ClockModel;
+import ua.yuriih.test2.common.model.ClockType;
 
 import java.math.BigDecimal;
 import java.sql.Connection;

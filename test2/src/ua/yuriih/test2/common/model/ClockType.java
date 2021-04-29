@@ -1,4 +1,4 @@
-package ua.yuriih.test2.model;
+package ua.yuriih.test2.common.model;
 
 public enum ClockType {
     MECHANICAL(0),

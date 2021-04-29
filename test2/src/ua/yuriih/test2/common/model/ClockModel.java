@@ -1,8 +1,9 @@
-package ua.yuriih.test2.model;
+package ua.yuriih.test2.common.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ClockModel {
+public class ClockModel implements Serializable {
     private int id;
 
     private final String name;

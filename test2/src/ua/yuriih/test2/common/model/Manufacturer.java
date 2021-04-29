@@ -1,6 +1,8 @@
-package ua.yuriih.test2.model;
+package ua.yuriih.test2.common.model;
 
-public class Manufacturer {
+import java.io.Serializable;
+
+public class Manufacturer implements Serializable {
     private int id;
 
     private final String name;
