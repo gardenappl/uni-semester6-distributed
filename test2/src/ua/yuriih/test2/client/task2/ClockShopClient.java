@@ -2,7 +2,9 @@ package ua.yuriih.test2.client.task2;
 
 import ua.yuriih.test2.client.ConsoleUI;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class ClockShopClient {

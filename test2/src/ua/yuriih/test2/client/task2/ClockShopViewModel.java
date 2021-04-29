@@ -8,14 +8,11 @@ import ua.yuriih.test2.client.task2.operations.GetMechanicalClocksCheaperThan;
 import ua.yuriih.test2.common.ClockModel;
 import ua.yuriih.test2.common.ClockType;
 import ua.yuriih.test2.common.Manufacturer;
-import ua.yuriih.test2.common.task3.IClockModelDao;
-import ua.yuriih.test2.common.task3.IManufacturerDao;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class ClockShopViewModel extends AbstractClockShopViewModel {

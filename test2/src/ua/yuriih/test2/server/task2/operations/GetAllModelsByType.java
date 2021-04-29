@@ -5,7 +5,9 @@ import ua.yuriih.test2.common.ClockType;
 import ua.yuriih.test2.server.ClockModelDao;
 import ua.yuriih.test2.server.ManufacturerDao;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class GetAllModelsByType extends Operation {
