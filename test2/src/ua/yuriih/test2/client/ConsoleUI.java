@@ -1,22 +1,21 @@
-package ua.yuriih.test2.client.task2;
+package ua.yuriih.test2.client;
 
-import ua.yuriih.test2.client.task2.operations.GetAllModelsByType;
-import ua.yuriih.test2.client.task2.operations.GetAllModelsFromCountry;
-import ua.yuriih.test2.client.task2.operations.GetManufacturersWithMaxTotalAmount;
-import ua.yuriih.test2.client.task2.operations.GetMechanicalClocksCheaperThan;
 import ua.yuriih.test2.common.ClockModel;
 import ua.yuriih.test2.common.ClockType;
 import ua.yuriih.test2.common.Manufacturer;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ConsoleUI {
-    public void run(ObjectInputStream in, ObjectOutputStream out) throws IOException {
+    private final AbstractClockShopViewModel viewModel;
+
+    public ConsoleUI(AbstractClockShopViewModel viewModel) {
+        this.viewModel = viewModel;
+    }
+
+    public void run() {
         System.out.println("Enter command (CLOCKS_BY_TYPE, " +
                 "CLOCKS_BY_COUNTRY, " +
                 "CLOCKS_MECHANICAL_CHEAPER_THAN, " +
@@ -29,37 +28,32 @@ public class ConsoleUI {
                 case "CLOCKS_BY_TYPE" -> {
                     System.out.println("Enter type (0 = mechanical, 1 = piezo):");
                     int typeNum = scanner.nextInt();
-                    GetAllModelsByType operation = new GetAllModelsByType();
                     ArrayList<ClockModel> clockModels =
-                            operation.performQuery(in, out, ClockType.get(typeNum));
+                            viewModel.getAllModelsByType(ClockType.get(typeNum));
                     for (ClockModel clockModel : clockModels)
                         System.out.println(clockModel);
                 }
                 case "CLOCKS_BY_COUNTRY" -> {
                     System.out.println("Enter country:");
                     String country = scanner.nextLine();
-                    GetAllModelsFromCountry operation = new GetAllModelsFromCountry();
                     ArrayList<ClockModel> clockModels =
-                            operation.performQuery(in, out, country);
+                            viewModel.getAllModelsFromCountry(country);
                     for (ClockModel clockModel : clockModels)
                         System.out.println(clockModel);
                 }
                 case "CLOCKS_MECHANICAL_CHEAPER_THAN" -> {
                     System.out.println("Enter price:");
                     BigDecimal price = scanner.nextBigDecimal();
-                    GetMechanicalClocksCheaperThan operation = new GetMechanicalClocksCheaperThan();
                     ArrayList<ClockModel> clockModels =
-                            operation.performQuery(in, out, price);
+                            viewModel.getMechanicalModelsCheaperThan(price);
                     for (ClockModel clockModel : clockModels)
                         System.out.println(clockModel);
                 }
                 case "MANUFACTURERS_MAX_TOTAL_AMOUNT" -> {
                     System.out.println("Enter max. total amount:");
                     int maxTotalAmount = scanner.nextInt();
-                    GetManufacturersWithMaxTotalAmount operation =
-                            new GetManufacturersWithMaxTotalAmount();
                     ArrayList<Manufacturer> manufacturers =
-                            operation.performQuery(in, out, maxTotalAmount);
+                            viewModel.getManufacturersWithMaxTotalAmount(maxTotalAmount);
                     for (Manufacturer manufacturer : manufacturers)
                         System.out.println(manufacturer);
                 }

@@ -1,5 +1,7 @@
 package ua.yuriih.test2.client.task2;
 
+import ua.yuriih.test2.client.ConsoleUI;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -11,6 +13,6 @@ public class ClockShopClient {
         ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
         System.out.println("Connected.");
 
-        new ConsoleUI().run(in, out);
+        new ConsoleUI(new ClockShopViewModel(in, out)).run();
     }
 }
