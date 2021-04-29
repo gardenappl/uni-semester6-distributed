@@ -1,7 +1,5 @@
 package ua.yuriih.test2.common.task2;
 
-import ua.yuriih.test2.common.model.ClockType;
-
 import java.util.HashMap;
 
 public enum Operations {

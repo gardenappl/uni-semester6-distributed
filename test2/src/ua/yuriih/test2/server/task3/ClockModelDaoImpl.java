@@ -1,9 +1,9 @@
 package ua.yuriih.test2.server.task3;
 
-import ua.yuriih.test2.common.model.ClockModel;
-import ua.yuriih.test2.common.model.ClockType;
+import ua.yuriih.test2.common.ClockModel;
+import ua.yuriih.test2.common.ClockType;
 import ua.yuriih.test2.common.task3.IClockModelDao;
-import ua.yuriih.test2.server.dao.ClockModelDao;
+import ua.yuriih.test2.server.ClockModelDao;
 
 import java.math.BigDecimal;
 import java.rmi.RemoteException;

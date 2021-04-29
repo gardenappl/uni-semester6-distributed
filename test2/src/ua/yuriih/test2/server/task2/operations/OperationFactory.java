@@ -1,8 +1,8 @@
 package ua.yuriih.test2.server.task2.operations;
 
 import ua.yuriih.test2.common.task2.Operations;
-import ua.yuriih.test2.server.dao.ClockModelDao;
-import ua.yuriih.test2.server.dao.ManufacturerDao;
+import ua.yuriih.test2.server.ClockModelDao;
+import ua.yuriih.test2.server.ManufacturerDao;
 
 public final class OperationFactory {
     private final ClockModelDao clockModelDao;

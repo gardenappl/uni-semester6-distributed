@@ -1,13 +1,11 @@
 package ua.yuriih.test2.client.task2.operations;
 
-import ua.yuriih.test2.common.model.ClockModel;
-import ua.yuriih.test2.common.model.Manufacturer;
+import ua.yuriih.test2.common.Manufacturer;
 import ua.yuriih.test2.common.task2.Operations;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class GetManufacturersWithMaxTotalAmount extends Operation {

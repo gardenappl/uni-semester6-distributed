@@ -1,10 +1,8 @@
 package ua.yuriih.test2.client.task2.operations;
 
-import ua.yuriih.test2.common.model.ClockModel;
-import ua.yuriih.test2.common.model.ClockType;
+import ua.yuriih.test2.common.ClockModel;
+import ua.yuriih.test2.common.ClockType;
 import ua.yuriih.test2.common.task2.Operations;
-import ua.yuriih.test2.server.dao.ClockModelDao;
-import ua.yuriih.test2.server.dao.ManufacturerDao;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

@@ -1,16 +1,9 @@
 package ua.yuriih.test2.server.task3;
 
-import ua.yuriih.test2.server.dao.ClockModelDao;
-import ua.yuriih.test2.server.dao.ManufacturerDao;
-import ua.yuriih.test2.server.task2.ClientHandler;
+import ua.yuriih.test2.server.ClockModelDao;
+import ua.yuriih.test2.server.ManufacturerDao;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.MalformedURLException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;

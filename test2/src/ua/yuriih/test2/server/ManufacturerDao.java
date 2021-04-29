@@ -1,6 +1,6 @@
-package ua.yuriih.test2.server.dao;
+package ua.yuriih.test2.server;
 
-import ua.yuriih.test2.common.model.Manufacturer;
+import ua.yuriih.test2.common.Manufacturer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

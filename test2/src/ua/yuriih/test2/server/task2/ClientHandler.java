@@ -1,15 +1,14 @@
 package ua.yuriih.test2.server.task2;
 
 import ua.yuriih.test2.common.task2.Operations;
-import ua.yuriih.test2.server.dao.ClockModelDao;
-import ua.yuriih.test2.server.dao.ManufacturerDao;
+import ua.yuriih.test2.server.ClockModelDao;
+import ua.yuriih.test2.server.ManufacturerDao;
 import ua.yuriih.test2.server.task2.operations.Operation;
 import ua.yuriih.test2.server.task2.operations.OperationFactory;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
 
 public class ClientHandler {
     private final ObjectOutputStream out;

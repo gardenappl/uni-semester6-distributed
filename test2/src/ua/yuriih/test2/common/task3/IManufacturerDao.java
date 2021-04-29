@@ -1,10 +1,7 @@
 package ua.yuriih.test2.common.task3;
 
-import ua.yuriih.test2.common.model.ClockModel;
-import ua.yuriih.test2.common.model.ClockType;
-import ua.yuriih.test2.common.model.Manufacturer;
+import ua.yuriih.test2.common.Manufacturer;
 
-import java.math.BigDecimal;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;

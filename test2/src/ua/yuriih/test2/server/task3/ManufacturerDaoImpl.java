@@ -1,9 +1,8 @@
 package ua.yuriih.test2.server.task3;
 
-import ua.yuriih.test2.common.model.Manufacturer;
+import ua.yuriih.test2.common.Manufacturer;
 import ua.yuriih.test2.common.task3.IManufacturerDao;
-import ua.yuriih.test2.server.dao.ClockModelDao;
-import ua.yuriih.test2.server.dao.ManufacturerDao;
+import ua.yuriih.test2.server.ManufacturerDao;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;

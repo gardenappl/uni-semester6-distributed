@@ -1,8 +1,8 @@
 package ua.yuriih.test2.server.task2.operations;
 
-import ua.yuriih.test2.common.model.Manufacturer;
-import ua.yuriih.test2.server.dao.ClockModelDao;
-import ua.yuriih.test2.server.dao.ManufacturerDao;
+import ua.yuriih.test2.common.Manufacturer;
+import ua.yuriih.test2.server.ClockModelDao;
+import ua.yuriih.test2.server.ManufacturerDao;
 
 import java.io.*;
 import java.util.ArrayList;

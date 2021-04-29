@@ -1,7 +1,6 @@
 package ua.yuriih.test2.client.task2.operations;
 
-import ua.yuriih.test2.common.model.ClockModel;
-import ua.yuriih.test2.common.model.ClockType;
+import ua.yuriih.test2.common.ClockModel;
 import ua.yuriih.test2.common.task2.Operations;
 
 import java.io.IOException;

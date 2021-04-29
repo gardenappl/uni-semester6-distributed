@@ -1,14 +1,11 @@
 package ua.yuriih.test2.common.task3;
 
-import ua.yuriih.test2.common.model.ClockModel;
-import ua.yuriih.test2.common.model.ClockType;
+import ua.yuriih.test2.common.ClockModel;
+import ua.yuriih.test2.common.ClockType;
 
 import java.math.BigDecimal;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface IClockModelDao extends Remote {

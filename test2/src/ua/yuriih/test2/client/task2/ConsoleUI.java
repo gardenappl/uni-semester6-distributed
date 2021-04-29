@@ -4,9 +4,9 @@ import ua.yuriih.test2.client.task2.operations.GetAllModelsByType;
 import ua.yuriih.test2.client.task2.operations.GetAllModelsFromCountry;
 import ua.yuriih.test2.client.task2.operations.GetManufacturersWithMaxTotalAmount;
 import ua.yuriih.test2.client.task2.operations.GetMechanicalClocksCheaperThan;
-import ua.yuriih.test2.common.model.ClockModel;
-import ua.yuriih.test2.common.model.ClockType;
-import ua.yuriih.test2.common.model.Manufacturer;
+import ua.yuriih.test2.common.ClockModel;
+import ua.yuriih.test2.common.ClockType;
+import ua.yuriih.test2.common.Manufacturer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

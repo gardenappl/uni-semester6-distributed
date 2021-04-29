@@ -1,7 +1,7 @@
 package ua.yuriih.test2.server.task2;
 
-import ua.yuriih.test2.server.dao.ManufacturerDao;
-import ua.yuriih.test2.server.dao.ClockModelDao;
+import ua.yuriih.test2.server.ManufacturerDao;
+import ua.yuriih.test2.server.ClockModelDao;
 
 import java.io.*;
 import java.net.ServerSocket;
